@@ -23,17 +23,17 @@ File runtimeDockerDirectory = project.file("${project.buildDir}/runtime/docker")
 
 task buildDockerImage() {
     doFirst {
-        runtimeDockerDirectory.parentFile.mkdirs()
+        runtimeDockerDirectory.mkdirs()
         runtimeDockerDirectory.delete()
+        copy {
+            from project.file("docker")
+            into runtimeDockerDirectory
+        }
         download {
             src "https://github.com/novnc/noVNC/archive/refs/tags/v1.2.0.tar.gz"
             dest runtimeDockerDirectory
             tempAndMove true
             overwrite false
-        }
-        copy {
-            from project.file("docker")
-            into runtimeDockerDirectory
         }
     }
     doLast {
@@ -78,7 +78,7 @@ task runDockerContainer(type: Exec) {
     }
     executable("docker")
     args(
-            "run", //"--rm",
+            "run", "--rm",
             "--add-host", "host.docker.internal:host-gateway",
             "-p", "${port}:6080",
             "--platform=linux/${currentArch}",
