@@ -18,6 +18,7 @@ def mainVersion = "1.2.0"
 Map<String, String> envMap = new HashMap<>(System.getenv())
 def imageRepository = envMap.getOrDefault("IMAGE_REPOSITORY ", "wangz2019/docker-novnc")
 def alpineRepo = envMap.getOrDefault("ALPINE_REPO", "mirrors.aliyun.com")
+String imageWithTag = "${imageRepository}:${mainVersion}"
 File runtimeDockerDirectory = project.file("${project.buildDir}/runtime/docker")
 
 task buildDockerImage() {
@@ -36,7 +37,6 @@ task buildDockerImage() {
         }
     }
     doLast {
-        String imageWithTag = imageWithTag(imageRepository, mainVersion)
         exec {
             commandLine(
                     "docker", "build",
@@ -52,7 +52,6 @@ task buildDockerImage() {
 
 task pushDockerImage() {
     doLast {
-        String imageWithTag = imageWithTag(imageRepository, mainVersion)
         exec {
             commandLine(
                     "docker", "buildx", "build",
@@ -93,13 +92,6 @@ task stopDockerContainer(type: Exec) {
     args(
             "stop", containerName
     )
-}
-
-private static String imageWithTag(
-        String imageRepository,
-        String mainVersion
-) {
-    return "${imageRepository}:${mainVersion}"
 }
 
 apply from: project.file("docs.nginx.gradle")
