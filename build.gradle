@@ -80,7 +80,7 @@ task runDockerContainer(type: Exec) {
             "-p", "${port}:6080",
             "-e", "VNC_SERVER=host.docker.internal:5901",
             "--name", containerName,
-            "-d", imageWithTag(imageRepository, mainVersion),
+            "-d", imageWithTag,
     )
     doLast {
         println("visit http://localhost:${port}/vnc.html")
