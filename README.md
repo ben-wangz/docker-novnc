@@ -43,3 +43,9 @@
       ```
 5. you can also jump into the container with ssh
     * visit http://localhost:6080/
+6. build multi-platform images and push them to docker registry
+    * ```shell
+      ./gradlew :pushDockerImage
+      ```
+    * you need an environment to build multi-platform
+      images: [develop with docker](https://blog.geekcity.tech/#/docs/develop.with.docker)
